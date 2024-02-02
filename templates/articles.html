@@ -1,0 +1,21 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+    <h3>Makaleler</h3>
+    <hr>
+    {% if articles %}
+    <form action="/search" method="POST">
+        <input class="mr-sm-2" name = "keyword" type="search" placeholder="Makale adı" aria-label="Search">
+        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Ara</button>
+        <hr>
+    </form>
+    
+    <ul class="list-group">
+        {% for article in articles %}
+        <li class="list-group-item"><a href="article/{{article.id}}">{{article.title}}</a></li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <div class = "alert alert-danger">Henüz makale yok</div>
+    {% endif %}
+{% endblock %}

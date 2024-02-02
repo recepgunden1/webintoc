@@ -1,0 +1,18 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+    
+{% if article %}
+    <h3>{{ article.title }}</h3>
+    <hr>
+    <h5>{{article.content}}</h5>
+    <hr>
+    <h6>Yazar: {{article.author}}</h6>
+    <h6>Oluşturulma tarihi: {{article.created_date}}</h6>
+{% else %}
+    <div class="alert alert-warning">
+        Böyle bir makale bulunamadı
+    </div>
+{% endif %}
+
+{% endblock %}
