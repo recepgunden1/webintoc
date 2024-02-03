@@ -145,26 +145,29 @@ def logout():
     session.clear()
     return redirect(url_for("index"))
 
-@app.route("/addarticle",methods=["GET","POST"])
+@app.route("/addarticle", methods=["GET", "POST"])
 @login_required
 def addarticle():
     form = ArticleForm(request.form)
     if request.method == "POST" and form.validate():
         title = form.title.data
         content = form.content.data
+        print("Title:", title)
+        print("Content:", content)
 
         cursor = mysql.connection.cursor()
-        sorgu = "insert into articles(title,author,content) VALUES(%s,%s,%s)"
-        cursor.execute(sorgu,(title,session["username"],content))
+        sorgu = "INSERT INTO articles (title, author, content) VALUES (%s, %s, %s)"
+        cursor.execute(sorgu, (title, session["username"], content))
 
         mysql.connection.commit()
         cursor.close()
 
-        flash("Makale başarıyla eklendi","success")
+        flash("Makale başarıyla eklendi", "success")
 
         return redirect(url_for("dashboard"))
 
-    return render_template("addarticle.html",form=form)
+    return render_template("addarticle.html", form=form)
+
 
 @app.route("/edit/<string:id>",methods=["GET","POST"])
 @login_required
