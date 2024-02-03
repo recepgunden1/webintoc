@@ -143,7 +143,7 @@ def article(id):
             mysql.connection.commit()
             cursor.close()
             flash("Yorum başarıyla eklendi", "success")
-            return redirect(url_for("dashboard"))
+            return redirect(url_for("index"))
         article = cursor.fetchone()
         return render_template("article.html",article = article,form = form)
 
