@@ -9,6 +9,13 @@
     <hr>
     <h6>Yazar: {{article.author}}</h6>
     <h6>Oluşturulma tarihi: {{article.created_date}}</h6>
+    <hr>
+    <h3>Yorum Yap</h3>
+    {% from "includes/formhelpers.html" import render_field %}
+    <form method="POST">
+    {{ render_field(form.comment,class = "form-control") }}
+    <button type="submit" class="btn btn-success">Yorum yap</button>
+    </form>
 {% else %}
     <div class="alert alert-warning">
         Böyle bir makale bulunamadı

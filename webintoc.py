@@ -126,17 +126,27 @@ def login():
     
     return render_template("login.html",form = form)
 
-@app.route("/article/<string:id>")
+@app.route("/article/<string:id>", methods=["GET","POST"])
 @login_required
 def article(id):
+    form = CommentForm(request.form)
     cursor = mysql.connection.cursor()
     sorgu = "select * from articles where id = %s"
     result = cursor.execute(sorgu,(id,))
-
-    if result > 0:
-        article = cursor.fetchone()
-        return render_template("article.html",article = article)
     
+    if result > 0:
+        if request.method == "POST" and form.validate():
+            comment = form.comment.data
+            article_id = id
+            sorgu2 = "INSERT INTO comments (article_id, username, comment) VALUES (%s, %s, %s)"
+            cursor.execute(sorgu2,(article_id,session["username"], comment))
+            mysql.connection.commit()
+            cursor.close()
+            flash("Yorum başarıyla eklendi", "success")
+            return redirect(url_for("dashboard"))
+        article = cursor.fetchone()
+        return render_template("article.html",article = article,form = form)
+
     else:
         return(render_template("article.html"))
 
@@ -228,6 +238,9 @@ class ArticleForm(Form):
     title = StringField("Makale Başlığı",validators=[validators.length(min=4,max=50)])
     content = TextAreaField("Makale içeriği",validators=[validators.length(min=10)])
 
+class CommentForm(Form):
+    comment = TextAreaField("",validators=[validators.length(min=1,max=99)])
+
 @app.route("/search",methods=["GET","POST"])
 def search():
     if request.method == "GET":
@@ -245,5 +258,6 @@ def search():
         else:
             articles = cursor.fetchall()
             return render_template("articles.html",articles=articles)
+        
 if __name__ == "__main__":
     app.run(debug=True)
