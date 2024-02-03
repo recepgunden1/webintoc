@@ -3,3 +3,4 @@
  - [ ] Başlıklara yazı tipleri getirilecek 
  - [ ] Makaleler listesi daha düzel hale getirilecek
  - [ ] Kitaplar sayfası yapılacak
+ - [ ] Makale detay sayfasına yorumlar getirilecek
