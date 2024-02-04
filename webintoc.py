@@ -40,7 +40,15 @@ mysql = MySQL(app)
 
 @app.route("/")
 def index():
-    return render_template("index.html")
+    cursor = mysql.connection.cursor()
+    sorgu = "select * from articles"
+    result = cursor.execute(sorgu)
+
+    if result > 0:
+        article = cursor.fetchall()
+        return render_template("index.html",article = article)
+    else:
+        return render_template("index.html")
 
 @app.route("/about")
 def about():

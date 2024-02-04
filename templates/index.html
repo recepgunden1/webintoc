@@ -3,6 +3,21 @@
 {% block body %}
 <div class="jumbotron text-center">
     <h3>Webintoc bloğuna hoş geldiniz</h3>
-    <h5>Bu blog da siz geliştiriciler dilediğiniz gibi makaleler yayınlayabilecek ve okuyabileceksiniz herkese iyi günler..</h5>
+    <h5>Bu blog da siz geliştiriciler dilediğiniz gibi makaleler yayınlayabilecek ve okuyabileceksiniz. Herkese iyi günler..</h5>
 </div>
+{% if article %}
+    {% for article_item in article %}
+        <h3>{{ article_item.title }}</h3>
+        <hr>
+        <h5>{{ article_item.content }}</h5>
+        <hr>
+        <h6>Yazar: {{ article_item.author }} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+        Oluşturulma tarihi: {{ article_item.created_date }}</h6>
+        <hr>
+    {% endfor %}
+{% else %}
+    <div class="alert alert-warning">
+        Henüz makale yok
+    </div>
+{% endif %}
 {% endblock %}

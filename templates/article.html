@@ -10,18 +10,20 @@
     <h6>Yazar: {{ article.author }} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
         Oluşturulma tarihi: {{ article.created_date }}</h6>
     <hr>
-    <h3>Yorum Yap</h3>
+    <h5>Yorum Yap</h5>
     {% from "includes/formhelpers.html" import render_field %}
     <form method="POST">
         {{ render_field(form.comment, class="form-control") }}
         <button type="submit" class="btn btn-success">Yorum yap</button>
     </form>
     <br>
-    <h4>Gelen yorumlar</h4>
+    <h5>Gelen yorumlar</h5>
     <br>
     {% if article_comment %}
         {% for comment in article_comment %}
-            <p>{{ comment.comment }}</p>
+            <small>{{ comment.username }}</small>
+            <h6>{{ comment.comment }}</h6>
+            <small>{{ comment.created_date }}</small>
             <hr>
         {% endfor %}
     {% else %}
