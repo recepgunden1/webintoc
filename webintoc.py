@@ -126,29 +126,38 @@ def login():
     
     return render_template("login.html",form = form)
 
-@app.route("/article/<string:id>", methods=["GET","POST"])
+@app.route("/article/<string:id>", methods=["GET", "POST"])
 @login_required
 def article(id):
     form = CommentForm(request.form)
     cursor = mysql.connection.cursor()
-    sorgu = "select * from articles where id = %s"
-    result = cursor.execute(sorgu,(id,))
+    sorgu = "SELECT * FROM articles WHERE id = %s"
+    result = cursor.execute(sorgu, (id,))
     
     if result > 0:
+        article = cursor.fetchone()
+        
+        # Yorumları çekmek için ayrı bir cursor kullanılmalı
+        cursor2 = mysql.connection.cursor()
+        sorgu3 = "SELECT * FROM comments WHERE article_id = %s"
+        cursor2.execute(sorgu3, (id,))
+        article_comment = cursor2.fetchall()
+
         if request.method == "POST" and form.validate():
             comment = form.comment.data
             article_id = id
             sorgu2 = "INSERT INTO comments (article_id, username, comment) VALUES (%s, %s, %s)"
-            cursor.execute(sorgu2,(article_id,session["username"], comment))
+            cursor.execute(sorgu2, (article_id, session["username"], comment))
             mysql.connection.commit()
             cursor.close()
+            cursor2.close()  # cursor2'yi kapatmayı unutmayın
             flash("Yorum başarıyla eklendi", "success")
             return redirect(url_for("index"))
-        article = cursor.fetchone()
-        return render_template("article.html",article = article,form = form)
 
+        return render_template("article.html", article_comment=article_comment, article=article, form=form)
     else:
-        return(render_template("article.html"))
+        return render_template("article.html", article_comment=[])  # article yoksa boş liste gönder
+
 
 @app.route("/logout")
 def logout():
