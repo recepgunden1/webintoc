@@ -3,6 +3,7 @@ from flask_mysqldb import MySQL
 from wtforms import Form,StringField,TextAreaField,PasswordField,validators
 from passlib.hash import sha256_crypt
 from functools import wraps
+
 # kullanici giris decoratoru
 def login_required(f):
     @wraps(f)
@@ -13,6 +14,7 @@ def login_required(f):
             flash("Bu sayfayı görüntülemek için lütfen giriş yapın !!!","danger")
             return redirect(url_for("login"))
     return decorated_function
+
 # Kullanıcı kayıt formu
 class RegisterForm(Form):
     name = StringField("İsim Soyisim",validators=[validators.Length(min=4,max=20,message = "En az 4 en çok 20 karakter girmelisiniz")])
@@ -27,6 +29,7 @@ class RegisterForm(Form):
 class LoginForm(Form):
     username = StringField("Kullanıcı Adı")
     password = PasswordField("Parola")
+
 app = Flask(__name__)
 
 app.secret_key = "webintoc"
@@ -166,7 +169,6 @@ def article(id):
     else:
         return render_template("article.html", article_comment=[])  # article yoksa boş liste gönder
 
-
 @app.route("/logout")
 def logout():
     session.clear()
@@ -194,7 +196,6 @@ def addarticle():
         return redirect(url_for("dashboard"))
 
     return render_template("addarticle.html", form=form)
-
 
 @app.route("/edit/<string:id>",methods=["GET","POST"])
 @login_required
@@ -249,7 +250,6 @@ def delete(id):
 
     cursor.close()
     return redirect(url_for("dashboard"))
-
 
 class ArticleForm(Form):
     title = StringField("Makale Başlığı",validators=[validators.length(min=4,max=50)])
