@@ -4,8 +4,6 @@ from passlib.hash import sha256_crypt
 import sqlite3 as sql
 
 app = Flask(__name__)
-con = sql.connect("webintoc.db")
-cursor = con.cursor()
 
 # Kullanıcı kayıt formu
 class RegisterForm(Form):
@@ -30,7 +28,18 @@ def about():
 def register():
     form = RegisterForm(request.form)
 
-    if request.method == "POST":
+    if request.method == "POST" and form.validate():
+        name = form.name.data
+        username = form.username.data
+        email = form.email.data 
+        password = sha256_crypt.encrypt(form.password.data)
+
+        with sql.connect("webintoc.db") as con:
+            cursor = con.cursor()
+            sorgu = "INSERT INTO users(name, email, username, password) VALUES (?, ?, ?, ?)"
+            cursor.execute(sorgu, (name, email, username, password))
+            con.commit()
+
         return redirect(url_for("index"))
     else:
         return render_template("register.html",form = form)
