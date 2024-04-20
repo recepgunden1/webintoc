@@ -82,20 +82,20 @@ def login():
             result = cursor.fetchone()
 
             if result:
-                data = cursor.fetchone()
-                real_password = data(["password"])
-                if sha256_crypt.verify(password_entered,real_password):
-                    flash("Başarıyla giriş yapıldı!","success")
+                columns = [desc[0] for desc in cursor.description]  # Sütun adlarını al
+                result_dict = dict(zip(columns, result))  # Sütun adları ile değerleri eşleştirerek bir sözlük oluştur
+                real_password = result_dict["password"]  # Şifreyi al
+
+                if sha256_crypt.verify(password_entered, real_password):
+                    flash("Başarıyla giriş yapıldı!", "success")
                     return redirect(url_for("index"))
                 else:
-                    flash("Parola veya kullanıcı adı hatalı!","danger")
+                    flash("Parola veya kullanıcı adı hatalı!", "danger")
                     return redirect(url_for("login"))
             else:
                 flash("Böyle bir kullanıcı bulunmuyor.", "danger")
                 return redirect(url_for("login"))
-
-            con.commit()
-
+                    
     return render_template("login.html", form=form)
 
 if __name__ == "__main__":
