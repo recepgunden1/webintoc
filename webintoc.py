@@ -67,10 +67,36 @@ def register():
 #######################
 #Giriş Yap
 #######################
-@app.route("/login", methods = ["GET","POST"])
+@app.route("/login", methods=["GET", "POST"])
 def login():
     form = LoginForm(request.form)
-    return render_template("login.html",form = form)
+
+    if request.method == "POST":
+        username = form.username.data
+        password_entered = form.password.data
+
+        with sql.connect("webintoc.db") as con:
+            cursor = con.cursor()
+            sorgu = "SELECT * FROM users WHERE username = ?"
+            cursor.execute(sorgu, (username,))
+            result = cursor.fetchone()
+
+            if result:
+                data = cursor.fetchone()
+                real_password = data(["password"])
+                if sha256_crypt.verify(password_entered,real_password):
+                    flash("Başarıyla giriş yapıldı!","success")
+                    return redirect(url_for("index"))
+                else:
+                    flash("Parola veya kullanıcı adı hatalı!","danger")
+                    return redirect(url_for("login"))
+            else:
+                flash("Böyle bir kullanıcı bulunmuyor.", "danger")
+                return redirect(url_for("login"))
+
+            con.commit()
+
+    return render_template("login.html", form=form)
 
 if __name__ == "__main__":
     app.run(debug=True)
