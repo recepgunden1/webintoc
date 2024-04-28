@@ -88,6 +88,10 @@ def login():
 
                 if sha256_crypt.verify(password_entered, real_password):
                     flash("Başarıyla giriş yapıldı!", "success")
+
+                    session["logged_in"] = True
+                    session["username"] = username
+
                     return redirect(url_for("index"))
                 else:
                     flash("Parola veya kullanıcı adı hatalı!", "danger")
