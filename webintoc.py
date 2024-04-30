@@ -2,6 +2,7 @@ from flask import Flask,render_template,flash,redirect,url_for,session,logging,r
 from wtforms import Form,StringField,TextAreaField,PasswordField,validators
 from passlib.hash import sha256_crypt
 import sqlite3 as sql
+from functools import wraps
 
 app = Flask(__name__)
 app.secret_key = "webintoc"
@@ -102,5 +103,31 @@ def login():
                     
     return render_template("login.html", form=form)
 
+#######################
+#Çıkış Yap
+#######################
+@app.route("/logout")
+def logout():
+    session.clear()
+    return redirect(url_for("index"))
+
+#######################
+#Decorator
+#######################
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if "logged_in" in session:
+            return f(*args, **kwargs)
+        else:
+            flash("Bu sayfayı görüntülemek için lütfen giriş yapınız..")
+    return decorated_function
+
+#######################
+#Kontrol Paneli
+#######################
+@app.route("/dashboard")
+def dashboard():
+    return render_template("dashboard.html")
 if __name__ == "__main__":
     app.run(debug=True)
