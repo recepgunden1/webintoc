@@ -121,12 +121,14 @@ def login_required(f):
             return f(*args, **kwargs)
         else:
             flash("Bu sayfayı görüntülemek için lütfen giriş yapınız..")
+            return redirect(url_for("login"))
     return decorated_function
 
 #######################
 #Kontrol Paneli
 #######################
 @app.route("/dashboard")
+@login_required
 def dashboard():
     return render_template("dashboard.html")
 if __name__ == "__main__":
