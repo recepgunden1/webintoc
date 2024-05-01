@@ -127,7 +127,7 @@ def login_required(f):
         if "logged_in" in session:
             return f(*args, **kwargs)
         else:
-            flash("Bu sayfayı görüntülemek için lütfen giriş yapınız..")
+            flash("Bu sayfayı görüntülemek için lütfen giriş yapınız..","danger")
             return redirect(url_for("login"))
     return decorated_function
 
@@ -157,11 +157,28 @@ def addarticle():
             cursor.execute(sorgu, (title, session["username"], content))
             con.commit()
 
-        flash("Makale başarıyla eklendi","succes")
+        flash("Makale başarıyla eklendi","success")
 
         return redirect(url_for("dashboard"))
     else:
         return render_template("addarticle.html",form = form)
+    
+#######################
+# Makaleler Sayfası
+#######################
+@app.route("/articles")
+def articles():
+    with sql.connect("webintoc.db") as con:
+        cursor = con.cursor()
+        sorgu = "select * from articles"
+        cursor.execute(sorgu)
+        articles = cursor.fetchall()
+
+    if articles: 
+        return render_template("articles.html", articles=articles)
+    else:
+        return render_template("articles.html")
+
 
 if __name__ == "__main__":
     app.run(debug=True)

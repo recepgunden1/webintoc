@@ -2,4 +2,4 @@
  - This is my blog website
 
 ## TODO
- - [ ] Buglar giderilecek
+ - [ ] Makale eklendigi zaman ekleme saati yanlis giriyor.
