@@ -21,6 +21,13 @@ class RegisterForm(Form):
     confirm = PasswordField("Parola Tekrar")
 
 #######################
+#Makale Ekleme Formu
+#######################
+class ArticleForm(Form):
+    title = StringField("Makale Başlığı",validators=[validators.Length(min = 1, max = 50)])
+    content = TextAreaField("Makale içeriği",validators=[validators.Length(min = 10)])
+
+#######################
 #Kullanıcı giriş formu
 #######################
 class LoginForm(Form):
@@ -131,5 +138,30 @@ def login_required(f):
 @login_required
 def dashboard():
     return render_template("dashboard.html")
+
+#######################
+#Makale Ekle
+#######################
+@app.route("/addarticle", methods=["GET", "POST"])
+@login_required
+def addarticle():
+    form = ArticleForm(request.form)
+
+    if request.method == "POST" and form.validate():
+        title = form.title.data
+        content = form.content.data
+
+        with sql.connect("webintoc.db") as con:
+            cursor = con.cursor()
+            sorgu = "INSERT INTO articles(title, author, content) VALUES (?, ?, ?)"
+            cursor.execute(sorgu, (title, session["username"], content))
+            con.commit()
+
+        flash("Makale başarıyla eklendi","succes")
+
+        return redirect(url_for("dashboard"))
+    else:
+        return render_template("addarticle.html",form = form)
+
 if __name__ == "__main__":
     app.run(debug=True)
