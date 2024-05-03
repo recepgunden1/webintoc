@@ -137,7 +137,16 @@ def login_required(f):
 @app.route("/dashboard")
 @login_required
 def dashboard():
-    return render_template("dashboard.html")
+    with sql.connect("webintoc.db") as con:
+        cursor = con.cursor()
+        sorgu = "SELECT * FROM articles WHERE = ?"
+        cursor.execute(sorgu, (session["username"],))
+        articles = cursor.fetchall()
+
+    if articles:
+        return render_template("dashboard.html", articles=articles)
+    else:
+        return render_template("dashboard.html")
 
 #######################
 #Makale Ekle
@@ -164,21 +173,20 @@ def addarticle():
         return render_template("addarticle.html",form = form)
     
 #######################
-# Makaleler Sayfası
+#Makale Sayfası
 #######################
 @app.route("/articles")
 def articles():
     with sql.connect("webintoc.db") as con:
         cursor = con.cursor()
-        sorgu = "select * from articles"
+        sorgu = "SELECT * FROM articles"
         cursor.execute(sorgu)
         articles = cursor.fetchall()
 
-    if articles: 
+    if articles:
         return render_template("articles.html", articles=articles)
     else:
         return render_template("articles.html")
-
 
 if __name__ == "__main__":
     app.run(debug=True)

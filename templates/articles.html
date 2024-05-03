@@ -7,12 +7,10 @@
     {% if articles %}
         <ul class="list-group">
             {% for article in articles %}
-                <li class="list-group-item">{{ article.title }}</li>
+                <li class="list-group-item">{{ article[1] }}</li>
             {% endfor %}
         </ul>
-
     {% else %}
-        <div class = "alert alert-danger">Henüz makale bulunmuyor</div>
-        
+        <div class="alert alert-danger">Henüz makale bulunmuyor</div>
     {% endif %}
 {% endblock %}
