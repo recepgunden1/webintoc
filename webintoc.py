@@ -204,5 +204,30 @@ def article(id):
     else:
         return render_template("article.html")
 
+#######################
+#Makale Silme
+#######################
+@app.route("/delete/<string:id>")
+@login_required
+def delete(id):
+    with sql.connect("webintoc.db") as con:
+        cursor = con.cursor()
+        sorgu = "SELECT * FROM articles WHERE author = ? and id = ?"
+        cursor.execute(sorgu,(session["username"],id))
+        article = cursor.fetchone()
+
+    if article:
+        with sql.connect("webintoc.db") as con:
+            cursor = con.cursor()
+            sorgu2 = "DELETE FROM articles WHERE id = ?"
+            cursor.execute(sorgu2,(id,))
+            article = cursor.fetchone() 
+            con.commit()
+        
+        return redirect(url_for("dashboard"))
+    else:
+        flash("Bu işlemi yapmaya yetkiniz yok!","danger")
+        return redirect(url_for("index"))
+
 if __name__ == "__main__":
     app.run(debug=True)
