@@ -187,6 +187,22 @@ def articles():
         return render_template("articles.html", articles=articles)
     else:
         return render_template("articles.html")
+    
+#######################
+#Makale Detay Sayfası
+#######################
+@app.route("/article/<string:id>")
+def article(id):
+    with sql.connect("webintoc.db") as con:
+        cursor = con.cursor()
+        sorgu = "SELECT * FROM articles WHERE id = ?"
+        cursor.execute(sorgu,(id,))
+        article = cursor.fetchone()
+
+    if article:
+        return render_template("article.html", article=article)
+    else:
+        return render_template("article.html")
 
 if __name__ == "__main__":
     app.run(debug=True)

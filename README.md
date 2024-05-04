@@ -3,3 +3,4 @@
 
 ## TODO
  - [ ] Makale eklendigi zaman ekleme saati yanlis giriyor.
+ - [ ] Kontrol paneli duzenlenecek.
