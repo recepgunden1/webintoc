@@ -139,7 +139,7 @@ def login_required(f):
 def dashboard():
     with sql.connect("webintoc.db") as con:
         cursor = con.cursor()
-        sorgu = "SELECT * FROM articles WHERE = ?"
+        sorgu = "SELECT * FROM articles WHERE author = ?"
         cursor.execute(sorgu, (session["username"],))
         articles = cursor.fetchall()
 
