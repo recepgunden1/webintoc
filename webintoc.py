@@ -229,5 +229,38 @@ def delete(id):
         flash("Bu işlemi yapmaya yetkiniz yok!","danger")
         return redirect(url_for("index"))
 
+#######################
+#Makale Güncelleme
+#######################
+@app.route("/edit/<string:id>",methods = ["GET","POST"])
+@login_required
+def update(id):
+    if request.method == "GET":
+        with sql.connect("webintoc.db") as con:
+            cursor = con.cursor()
+            sorgu = "SELECT * FROM articles WHERE id = ? and author = ?"
+            cursor.execute(sorgu,(id,session["username"]))
+            article = cursor.fetchone()
+
+            if article:
+                form = ArticleForm()
+                form.title.data = article[1]
+                form.content.data = article[3]
+                return render_template("update.html", form=form)
+    else:
+        form = ArticleForm(request.form)
+
+        newtitle = form.title.data
+        newcontent = form.content.data
+
+        with sql.connect("webintoc.db") as con:
+            cursor = con.cursor()
+            sorgu2 = "UPDATE articles SET title = ?, content = ? WHERE id = ?"
+            cursor.execute(sorgu2,(newtitle,newcontent,id))
+            con.commit()
+
+        flash("Makale başarıyla güncellendi","success")
+        return redirect(url_for("dashboard"))
+
 if __name__ == "__main__":
     app.run(debug=True)
