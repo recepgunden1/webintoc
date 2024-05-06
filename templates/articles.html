@@ -1,20 +1,24 @@
 {% extends 'layout.html' %}
-
+<head>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .search-form {
+            margin-right: auto; /* Sağa yaslanması için */
+        }
+    </style>
+</head>
 {% block body %}
     <h3>Tüm Makaleler</h3>
     <hr>
 
     {% if articles %}
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <div class="container-fluid">
-            <div class="collapse navbar-collapse">
-                <form class="d-flex">
-                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-outline-success" type="submit">Ara</button>
-                </form>
-            </div>
-        </div>
-    </nav>
+    <div class="container mt-4">
+        <form class="form-inline">
+          <input class="form-control mr-sm-2" type="search" placeholder="Ara" aria-label="Search">
+          <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Ara</button>
+        </form>
+    </div>
+    <br>
         <ul class="list-group">
             {% for article in articles %}
                 <li class="list-group-item"><a href="/article/{{article[0]}}">{{ article[1] }}</a></li>
@@ -23,4 +27,7 @@
     {% else %}
         <div class="alert alert-danger">Henüz makale bulunmuyor</div>
     {% endif %}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 {% endblock %}
