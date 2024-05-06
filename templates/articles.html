@@ -5,6 +5,16 @@
     <hr>
 
     {% if articles %}
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <div class="collapse navbar-collapse">
+                <form class="d-flex">
+                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-outline-success" type="submit">Ara</button>
+                </form>
+            </div>
+        </div>
+    </nav>
         <ul class="list-group">
             {% for article in articles %}
                 <li class="list-group-item"><a href="/article/{{article[0]}}">{{ article[1] }}</a></li>
