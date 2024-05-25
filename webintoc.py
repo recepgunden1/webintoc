@@ -262,5 +262,31 @@ def update(id):
         flash("Makale başarıyla güncellendi","success")
         return redirect(url_for("dashboard"))
 
+#######################
+#Makale Arama
+#######################
+@app.route("/search", methods=["GET", "POST"])
+def search():
+    if request.method == "GET":
+        flash("Bu işlemi yapamazsınız!", "danger")
+        return redirect(url_for("index"))
+    else:
+        keyword = request.form.get("keyword")
+        if not keyword:
+            flash("Lütfen bir anahtar kelime girin", "danger")
+            return redirect(url_for("articles"))
+        
+        with sql.connect("webintoc.db") as con:
+            cursor = con.cursor()
+            sorgu = "SELECT * FROM articles WHERE title LIKE ?"
+            cursor.execute(sorgu, ('%' + keyword + '%',))
+            articles = cursor.fetchall()
+
+            if articles:
+                return render_template("articles.html", articles=articles)
+            else:
+                flash("Böyle bir makale bulunamadı", "danger")
+                return redirect(url_for("articles"))
+
 if __name__ == "__main__":
     app.run(debug=True)
