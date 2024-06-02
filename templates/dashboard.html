@@ -3,10 +3,9 @@
 {% block body %}
     <h3>Kontrol Paneli</h3>
     <small>Hoşgeldin, {{session["username"]}}</small>
-    <hr>
-    <a href="/addarticle" class="btn btn-success">Makale Ekle</a>
     <br>
     {% if articles %}
+    <br>
     <table class="table table-hover">
         <thead>
           <tr>
@@ -27,8 +26,10 @@
             <td><a href="/delete/{{article[0]}}" class="btn btn-danger">Sil</a></td>
           </tr>
           {% endfor %}
+          
         </tbody>
       </table>
+      <a href="/addarticle" class="btn btn-success">Makale Ekle</a>
     {% else %}
         <div class="alert alert-danger">Henüz makale yayınlamadınız</div>
     {% endif %}
